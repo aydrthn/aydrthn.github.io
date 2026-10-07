@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+const education = [
+  {
+    institution: 'ShanghaiTech University',
+    date: '2023–2027 (expected)',
+    qualification: 'B.S. in Computer Science · China',
+    details: [
+      'GPA: 3.52/4.00 · Major GPA: 3.88/4.00.',
+      'Coursework: Computer Architecture, Parallel Programming, Machine Learning, and Artificial Intelligence.',
+    ],
+  },
+  {
+    institution: 'University of Illinois Urbana-Champaign',
+    date: '2025–2026',
+    qualification: 'Computer Science exchange student · United States',
+    details: [
+      'GPA: 3.83/4.00 · Dean’s List, Fall 2025.',
+      'Coursework: Parallel Programming, Systems Programming, Database Systems, Applied Machine Learning, and Computer Systems.',
+    ],
+  },
+  {
+    institution: 'Duke Kunshan University',
+    date: 'July 2024',
+    qualification: 'Global Health Summer Program · China',
+    details: [
+      'Completed an English-taught program on global health challenges, public health systems, health equity, and sustainable development.',
+      'Explored global health issues through case studies and project presentations, working with students from different academic backgrounds.',
+    ],
+  },
+];
+---
+<BaseLayout title="Experience — Aydrthn">
+  <PageIntro eyebrow="EXPERIENCE" title="The journey so far." />
+  <section class="split-section" aria-labelledby="education-title">
+    <h2 id="education-title">Education & learning</h2>
+    <div class="timeline">
+      {education.map((entry) => (
+        <article class="timeline-entry">
+          <p class="entry-date">{entry.date}</p>
+          <h3>{entry.institution}</h3>
+          <p class="qualification">{entry.qualification}</p>
+          <ul>{entry.details.map((detail) => <li>{detail}</li>)}</ul>
+        </article>
+      ))}
+    </div>
+  </section>
+  <section class="split-section" aria-labelledby="community-title">
+    <h2 id="community-title">Campus & community</h2>
+    <div class="timeline">
+      <article class="timeline-entry">
+        <p class="entry-date">2023–Present</p>
+        <h3>ShanghaiTech University Student Union</h3>
+        <p class="qualification">Staff Member · New Media Department</p>
+      </article>
+    </div>
+  </section>
+</BaseLayout>
+<style>
+  .timeline { min-width: 0; }
+  .timeline-entry { position: relative; border-left: 1px solid var(--border); padding-left: 28px; }
+  .timeline-entry::before { content: ''; position: absolute; left: -5px; top: 7px; width: 9px; height: 9px; border: 2px solid var(--muted); border-radius: 50%; background: var(--bg); }
+  .timeline-entry + .timeline-entry { margin-top: 36px; }
+  .entry-date { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  .timeline-entry h3 { font-size: 19px; }
+  .qualification { margin-top: 10px; font-size: 14px; }
+  .timeline-entry ul { padding-left: 18px; margin: 16px 0 0; color: var(--muted); font-size: 14px; }
+  .timeline-entry li + li { margin-top: 10px; }
+</style>

@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+---
+<BaseLayout title="About — Aydrthn">
+  <PageIntro eyebrow="ABOUT" title="About me." />
+  <section class="split-section" aria-labelledby="hello-title">
+    <h2 id="hello-title">Hello, I’m Tianni Yang.</h2>
+    <div class="prose">
+      <p>I go by Aydrthn online. I’m a computer science undergraduate at ShanghaiTech University, with graduation expected in 2027. I also studied computer science at the University of Illinois Urbana-Champaign as an exchange student in 2025–2026.</p>
+      <p>My interests lie in AI systems and GPU computing: optimizing kernels, making model inference more efficient, and understanding the runtime and memory systems behind them.</p>
+      <a class="text-link" href="https://github.com/Github-Anderson">Find me on GitHub <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+  <section class="split-section" aria-labelledby="interests-title">
+    <h2 id="interests-title">Interests & focus</h2>
+    <div class="prose">
+      <p>Through coursework and projects, I explore how algorithms interact with hardware. My GPT-2 inference project involved CUDA kernel optimization, tiled attention, KV caching, and performance profiling.</p>
+      <p>I also work with machine learning pipelines, from data preparation and feature extraction to model comparison and evaluation.</p>
+    </div>
+  </section>
+  <section class="split-section" aria-labelledby="skills-title">
+    <h2 id="skills-title">Technical toolkit</h2>
+    <dl class="skills">
+      <div><dt>Languages</dt><dd>C, C++, CUDA, Python</dd></div>
+      <div><dt>GPU computing</dt><dd>CUDA Toolkit, CUTLASS, Nsight Systems, Nsight Compute</dd></div>
+      <div><dt>Machine learning & data</dt><dd>scikit-learn, LightGBM, NumPy, pandas</dd></div>
+      <div><dt>Tools & environments</dt><dd>Linux (Ubuntu), Git, GitHub, LaTeX, Visual Studio Code</dd></div>
+    </dl>
+  </section>
+</BaseLayout>
+<style>
+  .skills { margin: 0; }
+  .skills div + div { margin-top: 20px; }
+  .skills dt { font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+  .skills dd { margin: 0; color: var(--muted); font-size: 14px; }
+</style>

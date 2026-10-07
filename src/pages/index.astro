@@ -1,16 +1,23 @@
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SiteSearch from '../components/SiteSearch.astro';
 ---
-
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout>
+  <section class="hero" aria-labelledby="hero-title">
+    <p class="eyebrow">A PERSONAL SPACE</p>
+    <h1 id="hero-title">Hello, I’m <span class="accent">Aydrthn.</span></h1>
+    
+    <div class="actions">
+      <a class="button primary" href="/projects/">Explore projects <span aria-hidden="true">↗</span></a>
+      <SiteSearch />
+    </div>
+  </section>
+  <section class="home-section" aria-labelledby="explore-title">
+    <div class="section-heading"><h2 id="explore-title">Start here</h2></div>
+    <div class="card-grid">
+      <a class="navigation-card" href="/about/"><span class="card-number">ABOUT</span><h3>About me <span aria-hidden="true">↗</span></h3></a>
+      <a class="navigation-card" href="/projects/"><span class="card-number">PROJECTS</span><h3>My projects <span aria-hidden="true">↗</span></h3></a>
+      <a class="navigation-card" href="/experience/"><span class="card-number">EXPERIENCE</span><h3>My journey <span aria-hidden="true">↗</span></h3></a>
+    </div>
+  </section>
+</BaseLayout>

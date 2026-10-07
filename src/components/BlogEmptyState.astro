@@ -1,0 +1,8 @@
+---
+interface Props { heading: string; message?: string; }
+const { heading, message = 'No posts yet.' } = Astro.props;
+---
+<section class="split-section" aria-labelledby="blog-section-title">
+  <h2 id="blog-section-title">{heading}</h2>
+  <div class="prose"><p class="muted">{message}</p></div>
+</section>

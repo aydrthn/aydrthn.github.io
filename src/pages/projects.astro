@@ -1,0 +1,127 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageIntro from '../components/PageIntro.astro';
+const projects = [
+  {
+    title: 'CUDA-Accelerated GPT-2 Inference',
+    category: 'GPU INFERENCE',
+    motif: 'gpu',
+    date: 'Spring 2026',
+    technologies: 'C++ · CUDA · CUTLASS · Nsight',
+    url: 'https://github.com/Github-Anderson/gpt2-inference-optimization',
+  },
+  {
+    title: 'Bangumi Anime Rating Prediction',
+    category: 'MACHINE LEARNING',
+    motif: 'ratings',
+    date: 'Fall 2025',
+    technologies: 'Python · pandas · scikit-learn · LightGBM · CLIP',
+    url: 'https://github.com/Github-Anderson/CS441-Project',
+  },
+  {
+    title: 'Drug Molecule Bioactivity Classification',
+    category: 'MACHINE LEARNING',
+    motif: 'molecule',
+    date: 'Spring 2025',
+    technologies: 'Python · NumPy · pandas · scikit-learn',
+    url: 'https://github.com/Github-Anderson/CS182-Project',
+  },
+  {
+    title: 'Halma Game-Playing Agent',
+    category: 'ARTIFICIAL INTELLIGENCE',
+    motif: 'board',
+    date: 'Spring 2025',
+    technologies: 'Python · Heuristic search · Adversarial search · Pruning',
+    url: 'https://github.com/Github-Anderson/CS181-Project',
+  },
+  {
+    title: 'Personal website',
+    category: 'PERSONAL WEBSITE',
+    motif: 'website',
+    date: 'In progress',
+    technologies: 'Astro · TypeScript · CSS',
+    url: 'https://github.com/aydrthn/aydrthn.github.io',
+  },
+];
+---
+<BaseLayout title="Projects — Aydrthn">
+  <PageIntro eyebrow="PROJECTS" title="From ideas to projects." />
+  <section class="project-list" aria-label="Projects">
+    {projects.map((project, index) => (
+      <article class="project-card" aria-labelledby={`project-${index}`}>
+        <div class="project-art" aria-hidden="true">
+          {project.motif === 'website' ? (
+            <div class="mini-window">
+              <div class="mini-dots"><i></i><i></i><i></i></div>
+              <span>aydrthn.</span>
+              <div class="mini-line"></div><div class="mini-line short"></div>
+            </div>
+          ) : (
+            <div class={`project-illustration ${project.motif}`}>
+              {project.motif === 'gpu' && (
+                <svg viewBox="0 0 200 140" fill="none">
+                  <path class="motif-lines" d="M50 48H20m30 22H10m40 22H20m130-44h30m-30 22h40m-40 22h30M78 30V8m22 22V0m22 30V8M78 110v22m22-22v30m22-30v22" />
+                  <rect class="chip-outline" x="50" y="30" width="100" height="80" rx="14" />
+                  {[0,1,2].flatMap((row) => [0,1,2,3].map((col) => <rect class:list={["motif-fill", { "motif-lit": [1, 4, 10].includes(row * 4 + col) }]} x={65+col*19} y={45+row*18} width="13" height="12" rx="3" />))}
+                </svg>
+              )}
+              {project.motif === 'ratings' && (
+                <svg viewBox="0 0 200 140" fill="none">
+                  <path class="motif-lines" d="M0 126h200" />
+                  {[32,54,46,78,66,102,90].map((height,i) => <rect class:list={["motif-fill", { "motif-lit": [1, 3, 5].includes(i) }]} x={6+i*28} y={126-height} width="16" height={height} rx="5" />)}
+                  <path class="rating-trend" d="m14 68 28-22 28 8 28-32 28 12 28-24 28 12" />
+                </svg>
+              )}
+              {project.motif === 'molecule' && (
+                <svg viewBox="0 0 200 140" fill="none">
+                  <path class="motif-lines" d="m25 70 35-35 45 15 10 45-35 25-55-50m80-20 40-25 35 25m-65 45 40 15 25-35m-35-50v85" />
+                  {[[25,70],[60,35],[105,50],[115,95],[80,120],[145,25],[180,50],[155,110],[180,75]].map(([cx,cy],i) => <circle class:list={[i%3===0 ? 'motif-atom' : 'motif-node', { 'motif-lit': [1, 3, 6].includes(i) }]} cx={cx} cy={cy} r={i%3===0 ? 9 : 6} />)}
+                </svg>
+              )}
+              {project.motif === 'board' && (
+                <svg viewBox="0 0 200 140" fill="none">
+                  {[0,1,2,3,4].flatMap((row) => [0,1,2,3,4].map((col) => <circle class:list={[row+col<3 ? 'motif-piece' : row+col>5 ? 'motif-opponent' : 'motif-board', { 'motif-lit': [2, 8, 11, 19].includes(row * 5 + col) }]} cx={100+(col-row)*20} cy={22+(row+col)*12} r="6" />))}
+                  <path class="board-move" d="m60 70 40-24 40 24" />
+                </svg>
+              )}
+            </div>
+          )}
+        </div>
+        <div class="project-content">
+          <div class="project-meta">
+            <span class="eyebrow">{project.category}</span>
+            <span class="pill">{project.date}</span>
+          </div>
+          <h2 id={`project-${index}`}>{project.title}</h2>
+          <div class="project-bottom">
+            <span class="muted">{project.technologies}</span>
+            <a class="text-link" href={project.url} aria-label={`Source code for ${project.title}`}>Source code <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </article>
+    ))}
+  </section>
+</BaseLayout>
+<style>
+  .project-list { display: grid; gap: 24px; width: 100%; max-width: 960px; margin-inline: auto; }
+  .project-content { min-width: 0; }
+  .project-meta { flex-wrap: wrap; }
+  .project-bottom { flex-wrap: wrap; align-items: baseline; }
+  .project-bottom .text-link { flex-shrink: 0; }
+  .project-illustration { width: min(260px, 100%); }
+  .project-illustration svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .gpu { transform: rotate(-8deg); }
+  .molecule { transform: rotate(8deg); }
+  .motif-lines { stroke: var(--muted); stroke-width: 2; opacity: .35; stroke-linecap: round; stroke-linejoin: round; }
+  .chip-outline { fill: var(--surface); stroke: var(--border); stroke-width: 2; }
+  .motif-fill { fill: var(--accent); opacity: .3; }
+  .rating-trend { stroke: var(--accent); stroke-width: 2; opacity: .55; stroke-linecap: round; stroke-linejoin: round; }
+  .motif-node { fill: var(--surface); stroke: var(--muted); stroke-width: 2; }
+  .motif-atom { fill: var(--accent); opacity: .6; }
+  .motif-board { fill: var(--muted); opacity: .2; }
+  .motif-piece { fill: var(--accent); opacity: .65; }
+  .motif-opponent { fill: var(--muted); opacity: .55; }
+  .motif-lit { fill: var(--accent); opacity: 1; }
+  .motif-node.motif-lit { stroke: var(--accent); }
+  .board-move { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 3 5; opacity: .4; }
+</style>
