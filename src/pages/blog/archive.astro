@@ -1,7 +1,9 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
-import BlogEmptyState from '../../components/BlogEmptyState.astro';
+import BlogPostList from '../../components/BlogPostList.astro';
+import { getBlogPosts } from '../../lib/blog';
+const posts = await getBlogPosts('archive');
 ---
 <BlogLayout title="Archive" eyebrow="BLOG / ARCHIVE">
-  <BlogEmptyState heading="All posts" />
+  <BlogPostList posts={posts} heading="Latest archived posts" emptyMessage="No archived posts yet." />
 </BlogLayout>

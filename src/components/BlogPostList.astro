@@ -1,0 +1,19 @@
+---
+import BlogPostCard from './BlogPostCard.astro';
+import type { BlogPost } from '../lib/blog';
+interface Props { posts: BlogPost[]; heading: string; emptyMessage?: string; }
+const { posts, heading, emptyMessage = 'No posts yet.' } = Astro.props;
+---
+<section class="post-section" aria-labelledby="blog-section-title">
+  <h2 id="blog-section-title">{heading}</h2>
+  {posts.length ? (
+    <ul class="post-list">
+      {posts.map((post) => <li><BlogPostCard post={post} /></li>)}
+    </ul>
+  ) : <p class="muted">{emptyMessage}</p>}
+</section>
+<style>
+  .post-section { border-top: 1px solid var(--border); padding-top: 32px; }
+  h2 { margin-bottom: 24px; font-size: 21px; }
+  .post-list { display: grid; gap: 14px; width: 100%; max-width: 960px; margin: 0 auto; padding: 0; list-style: none; }
+</style>

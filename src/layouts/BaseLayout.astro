@@ -3,8 +3,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../data/site';
 import '../styles/global.css';
-interface Props { title?: string; section?: 'main' | 'blog'; }
-const { title = site.title, section = 'main' } = Astro.props;
+interface Props { title?: string; section?: 'main' | 'blog'; description?: string; ogType?: 'website' | 'article'; }
+const { title = site.title, section = 'main', description, ogType = 'website' } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://aydrthn.github.io');
 ---
 <!doctype html>
@@ -16,7 +16,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://aydrthn.git
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonical} />
-    <meta property="og:type" content="website" />
+    {description && <meta name="description" content={description} />}
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:type" content={ogType} />
     <meta property="og:title" content={title} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="en_US" />

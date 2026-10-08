@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets';
+import { blogCategories, formatPostDate, type BlogPost } from '../lib/blog';
+interface Props { post: BlogPost; }
+const { post } = Astro.props;
+const { title, description, pubDate, lang, cover, coverAlt } = post.entry.data;
+---
+<article>
+  <a class:list={['post-card', { 'has-cover': cover }]} href={post.href}>
+    {cover && (
+      <div class="post-cover">
+        <Image src={cover} alt={coverAlt} layout="constrained" widths={[240, 336, 480, 672, 1008]}
+          sizes="(max-width: 560px) calc(35vw - 14px), (max-width: 800px) calc(35vw - 16.8px), (max-width: 1056px) calc(35vw - 33.6px), 336px" />
+      </div>
+    )}
+    <div class="post-details">
+      <div class="post-copy">
+        <div class="post-meta">
+          <span>{blogCategories[post.category].label}</span>
+          <span aria-hidden="true">·</span>
+          <time datetime={pubDate.toISOString()}>{formatPostDate(pubDate)}</time>
+        </div>
+        <h3 lang={lang}>{title}</h3>
+        <p lang={lang}>{description}</p>
+      </div>
+      <span class="post-arrow" aria-hidden="true">→</span>
+    </div>
+  </a>
+</article>
+<style>
+  .post-card { display: block; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); transition: border-color 180ms; }
+  .post-card.has-cover { display: grid; grid-template-columns: minmax(0, 0.35fr) minmax(0, 0.65fr); }
+  .post-cover { position: relative; min-height: 180px; background: var(--soft); }
+  .post-cover img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+  .post-details { display: flex; align-items: center; gap: 24px; min-width: 0; padding: 24px 28px; }
+  .post-card:hover { border-color: var(--muted); }
+  .post-copy { flex: 1; min-width: 0; }
+  .post-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; font-size: 12px; color: var(--muted); }
+  h3 { margin: 10px 0 8px; font-size: 21px; overflow-wrap: anywhere; }
+  p { color: var(--muted); font-size: 14px; overflow-wrap: anywhere; }
+  .post-arrow { flex-shrink: 0; color: var(--accent); }
+  .has-cover p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+  @media (max-width: 560px) {
+    .post-details { padding: 20px; gap: 16px; }
+    .has-cover .post-details { padding: 16px; gap: 10px; }
+    .has-cover .post-arrow { display: none; }
+    h3 { font-size: 19px; }
+    .has-cover h3 { font-size: 17px; }
+    .has-cover .post-meta { font-size: 11px; gap: 6px; }
+    .has-cover p { font-size: 13px; }
+  }
+</style>

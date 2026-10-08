@@ -1,7 +1,9 @@
 ---
 import BlogLayout from '../../layouts/BlogLayout.astro';
-import BlogEmptyState from '../../components/BlogEmptyState.astro';
+import BlogPostList from '../../components/BlogPostList.astro';
+import { getBlogPosts } from '../../lib/blog';
+const posts = await getBlogPosts('notes');
 ---
 <BlogLayout title="Notes" eyebrow="BLOG / NOTES">
-  <BlogEmptyState heading="Latest notes" message="No notes yet." />
+  <BlogPostList posts={posts} heading="Latest notes" emptyMessage="No notes yet." />
 </BlogLayout>
