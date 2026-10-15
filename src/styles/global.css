@@ -3,38 +3,44 @@
   color-scheme: light;
   --page-intro-top: 88px;
   --header-height: 89px;
-  --bg: #f0f2f5; --surface: #fff; --text: #22304a; --muted: #435269; --border: rgb(86 123 173 / 20%);
+  --bg: #eef0f3; --surface: #fff; --text: #22304a; --muted: #435269; --border: rgb(86 123 173 / 20%);
   --accent: #285cc0; --soft: rgb(98 148 210 / 10%); --header: rgb(255 255 255 / 56%);
   --glass-fill: rgb(255 255 255 / 35%); --glass-edge: rgb(255 255 255 / 76%);
   --glass-highlight: rgb(255 255 255 / 42%); --glass-shadow: rgb(48 62 107 / 9%);
   --glass-pointer-light: rgb(255 255 255 / 64%);
-  --glass-rim-top: rgb(255 255 255 / 66%); --glass-rim-bottom: rgb(255 255 255 / 34%);
-  --glass-rim-glow: rgb(255 255 255 / 13%);
+  --glass-rim-top: rgb(255 255 255 / 82%); --glass-rim-bottom: rgb(255 255 255 / 50%);
+  --glass-rim-glow: rgb(255 255 255 / 19%);
+  --glass-neutral-fill: transparent;
+  --glass-inner-top: transparent; --glass-inner-bottom: transparent;
   --project-art-top: rgb(46 116 216 / 24%); --project-art-bottom: rgb(103 174 247 / 12%);
   --project-divider: rgb(59 108 183 / 25%); --project-content-fill: rgb(255 255 255 / 24%);
 }
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --bg: #000000; --surface: #13233b; --text: #edf4ff; --muted: #afbed6; --border: rgb(146 181 228 / 18%);
-  --accent: #a5c2ff; --soft: rgb(139 183 237 / 10%); --header: rgb(0 0 0 / 58%);
-  --glass-fill: rgb(20 37 61 / 36%); --glass-edge: rgb(216 229 255 / 22%);
+  --bg: #101216; --surface: #13233b; --text: #edf4ff; --muted: #afbed6; --border: rgb(146 181 228 / 18%);
+  --accent: #a5c2ff; --soft: rgb(139 183 237 / 10%); --header: rgb(16 18 22 / 58%);
+  --glass-fill: rgb(32 32 32 / 36%); --glass-edge: rgb(216 229 255 / 22%);
   --glass-highlight: rgb(216 229 255 / 11%); --glass-shadow: rgb(3 7 19 / 24%);
   --glass-pointer-light: rgb(188 209 255 / 19%);
   --glass-rim-top: rgb(224 235 255 / 28%); --glass-rim-bottom: rgb(224 235 255 / 14%);
   --glass-rim-glow: rgb(224 235 255 / 5%);
+  --glass-neutral-fill: rgb(255 255 255 / 5%);
+  --glass-inner-top: rgb(255 255 255 / 4%); --glass-inner-bottom: rgb(255 255 255 / 3%);
   --project-art-top: rgb(27 107 184 / 40%); --project-art-bottom: rgb(23 74 135 / 24%);
   --project-divider: rgb(121 183 255 / 26%); --project-content-fill: rgb(10 20 37 / 23%);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) {
     color-scheme: dark;
-    --bg: #000000; --surface: #13233b; --text: #edf4ff; --muted: #afbed6; --border: rgb(146 181 228 / 18%);
-    --accent: #a5c2ff; --soft: rgb(139 183 237 / 10%); --header: rgb(0 0 0 / 58%);
-    --glass-fill: rgb(20 37 61 / 36%); --glass-edge: rgb(216 229 255 / 22%);
+    --bg: #101216; --surface: #13233b; --text: #edf4ff; --muted: #afbed6; --border: rgb(146 181 228 / 18%);
+    --accent: #a5c2ff; --soft: rgb(139 183 237 / 10%); --header: rgb(16 18 22 / 58%);
+    --glass-fill: rgb(32 32 32 / 36%); --glass-edge: rgb(216 229 255 / 22%);
     --glass-highlight: rgb(216 229 255 / 11%); --glass-shadow: rgb(3 7 19 / 24%);
     --glass-pointer-light: rgb(188 209 255 / 19%);
     --glass-rim-top: rgb(224 235 255 / 28%); --glass-rim-bottom: rgb(224 235 255 / 14%);
     --glass-rim-glow: rgb(224 235 255 / 5%);
+    --glass-neutral-fill: rgb(255 255 255 / 5%);
+    --glass-inner-top: rgb(255 255 255 / 4%); --glass-inner-bottom: rgb(255 255 255 / 3%);
     --project-art-top: rgb(27 107 184 / 40%); --project-art-bottom: rgb(23 74 135 / 24%);
     --project-divider: rgb(121 183 255 / 26%); --project-content-fill: rgb(10 20 37 / 23%);
   }
@@ -54,15 +60,18 @@ body { margin: 0; min-height: 100svh; isolation: isolate; background: var(--bg);
   transition: background-color 180ms ease;
   -webkit-backdrop-filter: blur(18px) saturate(1.16); backdrop-filter: blur(18px) saturate(1.16);
 }
-/* Static reflections taper horizontally and stay confined to the inner rim. */
+/* Fine rim reflections sit above faint, inward-fading dark-mode highlights. */
 [data-liquid-glass]::before {
   content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; border-radius: inherit;
   background:
     linear-gradient(90deg, transparent, var(--glass-rim-top) 12%, var(--glass-rim-top) 88%, transparent) center top / 100% 1px,
     linear-gradient(90deg, transparent, var(--glass-rim-bottom) 12%, var(--glass-rim-bottom) 88%, transparent) center bottom / 100% 1px,
     radial-gradient(ellipse at 50% 0%, var(--glass-rim-glow), transparent 70%) center top / 100% 6px,
-    radial-gradient(ellipse at 50% 100%, var(--glass-rim-glow), transparent 70%) center bottom / 100% 3px;
+    radial-gradient(ellipse at 50% 100%, var(--glass-rim-glow), transparent 70%) center bottom / 100% 3px,
+    linear-gradient(to bottom, var(--glass-inner-top), transparent min(40px, 35%)),
+    linear-gradient(to top, var(--glass-inner-bottom), transparent min(40px, 35%));
   background-repeat: no-repeat;
+  background-color: var(--glass-neutral-fill);
 }
 [data-liquid-glass]::after {
   content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; border-radius: inherit;
