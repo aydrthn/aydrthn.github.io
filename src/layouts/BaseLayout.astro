@@ -16,6 +16,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://aydrthn.git
     <meta name="generator" content={Astro.generator} />
     <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&icon_names=arrow_back,arrow_forward,dark_mode,desktop_windows,light_mode,north_east,search&display=block" />
     <link rel="canonical" href={canonical} />
     {description && <meta name="description" content={description} />}
     {description && <meta property="og:description" content={description} />}

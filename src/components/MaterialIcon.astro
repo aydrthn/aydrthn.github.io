@@ -1,0 +1,8 @@
+---
+interface Props {
+  name: 'arrow_back' | 'arrow_forward' | 'dark_mode' | 'desktop_windows' | 'light_mode' | 'north_east' | 'search';
+  class?: string;
+}
+const { name, class: className } = Astro.props;
+---
+<span class:list={['material-icon', className]} aria-hidden="true">{name}</span>

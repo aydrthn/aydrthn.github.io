@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import MaterialIcon from '../components/MaterialIcon.astro';
 import PageIntro from '../components/PageIntro.astro';
 const projects = [
   {
@@ -95,7 +96,7 @@ const projects = [
           <h2 id={`project-${index}`}>{project.title}</h2>
           <div class="project-bottom">
             <span class="muted">{project.technologies}</span>
-            <a class="text-link" href={project.url} aria-label={`Source code for ${project.title}`}>Source code <span aria-hidden="true">↗</span></a>
+            <a class="text-link" href={project.url} aria-label={`Source code for ${project.title}`}>Source code <MaterialIcon name="north_east" /></a>
           </div>
         </div>
       </article>

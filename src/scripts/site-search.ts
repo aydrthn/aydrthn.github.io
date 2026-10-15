@@ -112,8 +112,9 @@ export function startSiteSearch(search: HTMLElement) {
         title.className = 'search-result-title';
         title.textContent = page.title;
         const arrow = document.createElement('span');
+        arrow.className = 'material-icon';
         arrow.setAttribute('aria-hidden', 'true');
-        arrow.textContent = '↗';
+        arrow.textContent = 'north_east';
         heading.append(title, arrow);
         const section = document.createElement('span');
         section.className = 'search-result-section';

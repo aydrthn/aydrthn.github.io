@@ -1,7 +1,8 @@
 ---
 import { site } from '../data/site';
+import GitHubIcon from './GitHubIcon.astro';
 ---
 <footer class="site-footer container">
   <p>© {new Date().getFullYear()} {site.name}</p>
-  <a href={site.github}>GitHub <span aria-hidden="true">↗</span></a>
+  <a class="github-link" href={site.github}><GitHubIcon /> GitHub</a>
 </footer>

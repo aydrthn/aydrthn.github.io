@@ -1,6 +1,7 @@
 ---
 import { navigation, blogNavigation } from '../data/site';
 import { blogCategories, getBlogPosts } from '../lib/blog';
+import MaterialIcon from './MaterialIcon.astro';
 const posts = await getBlogPosts();
 const pages = Array.from(new Map([
   ...navigation.map(({ href, label }) => ({ href, title: label, section: href.startsWith('/blog/') ? 'Blog' : 'Page' })),
@@ -12,9 +13,9 @@ const pages = Array.from(new Map([
 ---
 <div class="site-search" data-search-pages={JSON.stringify(pages)}>
   <form class="search-bar" data-liquid-glass role="search">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg>
+    <MaterialIcon name="search" class="search-icon" />
     <input type="search" name="q" aria-label="Search pages and articles" placeholder="Search pages and articles…" autocomplete="off" aria-controls="search-results" />
-    <button class="search-submit" type="submit" aria-label="Search"><span aria-hidden="true">→</span></button>
+    <button class="search-submit" type="submit" aria-label="Search"><MaterialIcon name="arrow_forward" /></button>
   </form>
   <div class="search-results" data-liquid-glass id="search-results" aria-busy="false" hidden>
     <div class="search-results-scroll">
@@ -33,7 +34,7 @@ const pages = Array.from(new Map([
   .site-search { position: relative; z-index: 2; width: min(480px, 100%); min-width: 0; }
   .search-bar { --glass-radius: 16px; display: flex; align-items: center; gap: 12px; height: 48px; padding: 0 10px 0 18px; color: var(--muted); }
   .search-bar:focus-within { border-color: var(--accent); }
-  .search-bar svg { flex-shrink: 0; }
+  :global(.search-icon) { font-size: 20px; }
   input { width: 100%; min-width: 0; border: 0; outline: none; background: transparent; color: var(--text); font: inherit; font-size: 14px; }
   input::placeholder { color: var(--muted); }
   input:focus-visible { outline: none; }
