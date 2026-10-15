@@ -50,7 +50,7 @@ body { margin: 0; min-height: 100svh; isolation: isolate; background: var(--bg);
 [data-liquid-glass] {
   --glass-radius: 24px;
   position: relative; isolation: isolate; border: 1px solid var(--glass-edge); border-radius: var(--glass-radius);
-  background: var(--glass-fill); box-shadow: 0 12px 36px -16px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
+  background: var(--glass-fill); box-shadow: 0 0 14px -2px var(--glass-shadow), 0 12px 30px -18px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight);
   transition: background-color 180ms ease;
   -webkit-backdrop-filter: blur(18px) saturate(1.16); backdrop-filter: blur(18px) saturate(1.16);
 }
@@ -121,7 +121,7 @@ nav:not([data-indicator-ready]) a[aria-current] { box-shadow: 0 2px var(--accent
 .muted { color: var(--muted); }
 .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .navigation-card { padding: 30px 26px; transition: border-color 180ms, transform 180ms, box-shadow 180ms, background-color 180ms ease; }
-.navigation-card:hover { border-color: var(--glass-highlight); transform: translateY(-3px); box-shadow: 0 18px 38px -14px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight); }
+.navigation-card:hover { border-color: var(--glass-highlight); transform: translateY(-3px); box-shadow: 0 0 18px -1px var(--glass-shadow), 0 18px 38px -14px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight); }
 .card-number { font-size: 10px; letter-spacing: 1.3px; }
 .navigation-card h3 { display: flex; justify-content: space-between; font-size: 21px; margin: 34px 0 13px; }
 .navigation-card h3 span { font-size: 18px; color: var(--muted); }
