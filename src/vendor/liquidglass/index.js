@@ -1387,6 +1387,7 @@ void main() {
 
 	// \u2500\u2500 Cool glass tint \u2500\u2500
 	col = mix(col, col * vec3(0.92, 0.95, 1.05), u_tint);
+  col *= 1.0 + 0.0 * depth;
 
 	// \u2500\u2500 Fresnel \u2500\u2500
 	float fres = pow(1.0 - abs(N.z), 4.0) * u_fresnel;

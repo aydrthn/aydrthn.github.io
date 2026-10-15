@@ -5,11 +5,11 @@ import type { LiquidGlass, GlassConfig } from '../vendor/liquidglass/index.js';
 // Text, links and inputs are never rasterised, cloned or moved out of the DOM.
 const BACKGROUND_PAD = 128;
 const OPTICS: Partial<GlassConfig> = {
-  refraction: 0.72,
-  chromAberration: 0.045,
-  blurAmount: 0.12,
-  edgeHighlight: 0.12,
-  specular: 0.02,
+  refraction: 1.7,
+  chromAberration: 0.236,
+  blurAmount: 0.5,
+  edgeHighlight: 0,
+  specular: 0,
   fresnel: 0.55,
   distortion: 0.015,
   saturation: 0.06,

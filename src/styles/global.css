@@ -3,7 +3,7 @@
   color-scheme: light;
   --page-intro-top: 88px;
   --header-height: 89px;
-  --bg: #f7f8fa; --surface: #fff; --text: #22304a; --muted: #435269; --border: rgb(86 123 173 / 20%);
+  --bg: #f0f2f5; --surface: #fff; --text: #22304a; --muted: #435269; --border: rgb(86 123 173 / 20%);
   --accent: #285cc0; --soft: rgb(98 148 210 / 10%); --header: rgb(255 255 255 / 56%);
   --glass-fill: rgb(255 255 255 / 35%); --glass-edge: rgb(255 255 255 / 76%);
   --glass-highlight: rgb(255 255 255 / 42%); --glass-shadow: rgb(48 62 107 / 9%);
