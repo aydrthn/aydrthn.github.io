@@ -8,16 +8,35 @@ import SiteSearch from '../components/SiteSearch.astro';
     <h1 id="hero-title">Hello, I’m <span class="accent">Aydrthn.</span></h1>
     
     <div class="actions">
-      <a class="button primary" href="/projects/">Explore projects <span aria-hidden="true">↗</span></a>
+      <a class="button project-cta" data-liquid-glass href="/projects/">Explore projects <span aria-hidden="true">↗</span></a>
       <SiteSearch />
     </div>
   </section>
   <section class="home-section" aria-labelledby="explore-title">
     <div class="section-heading"><h2 id="explore-title">Start here</h2></div>
     <div class="card-grid">
-      <a class="navigation-card" href="/about/"><span class="card-number">ABOUT</span><h3>About me <span aria-hidden="true">↗</span></h3></a>
-      <a class="navigation-card" href="/projects/"><span class="card-number">PROJECTS</span><h3>My projects <span aria-hidden="true">↗</span></h3></a>
-      <a class="navigation-card" href="/experience/"><span class="card-number">EXPERIENCE</span><h3>My journey <span aria-hidden="true">↗</span></h3></a>
+      <a class="navigation-card" data-liquid-glass href="/about/"><span class="card-number">ABOUT</span><h3>About me <span aria-hidden="true">↗</span></h3></a>
+      <a class="navigation-card" data-liquid-glass href="/projects/"><span class="card-number">PROJECTS</span><h3>My projects <span aria-hidden="true">↗</span></h3></a>
+      <a class="navigation-card" data-liquid-glass href="/experience/"><span class="card-number">EXPERIENCE</span><h3>My journey <span aria-hidden="true">↗</span></h3></a>
     </div>
   </section>
 </BaseLayout>
+<style>
+  .project-cta {
+    --glass-radius: 16px;
+    height: 48px; flex-shrink: 0; gap: 12px; padding: 0 10px 0 18px;
+    border-radius: var(--glass-radius); font-size: 14px; font-weight: 400;
+    color: var(--accent); white-space: nowrap;
+  }
+  .project-cta::before {
+    content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+    background-color: rgb(63 122 223 / 20%); pointer-events: none;
+  }
+  /* Override the renderer's inline layer so the tint sits above the glass. */
+  .project-cta :global(.liquid-glass-canvas) { z-index: -2 !important; }
+  .project-cta > span {
+    display: grid; place-items: center; width: 30px; height: 30px;
+    border-radius: 6px; background: var(--soft);
+  }
+  @media (max-width: 560px) { .project-cta { font-size: 16px; } }
+</style>

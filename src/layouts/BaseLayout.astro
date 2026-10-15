@@ -1,6 +1,7 @@
 ---
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import LiquidGlass from '../components/LiquidGlass.astro';
 import { site } from '../data/site';
 import '../styles/global.css';
 interface Props { title?: string; section?: 'main' | 'blog'; description?: string; ogType?: 'website' | 'article'; }
@@ -35,6 +36,7 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://aydrthn.git
     </script>
   </head>
   <body>
+    <LiquidGlass />
     <a class="skip-link" href="#main">Skip to main content</a>
     <Header section={section} />
     <main id="main" class="container" tabindex="-1"><slot /></main>

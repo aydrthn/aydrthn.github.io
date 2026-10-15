@@ -5,20 +5,27 @@ const { section = 'main' } = Astro.props;
 const isBlog = section === 'blog';
 const links = isBlog ? blogNavigation : navigation;
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const activeHref = links
+  .filter(({ href }) => {
+    const target = href.replace(/\/$/, '') || '/';
+    return path === target || (target !== '/' && path.startsWith(`${target}/`));
+  })
+  .sort((a, b) => b.href.length - a.href.length)[0]?.href;
 ---
 <header class="site-header">
   <div class="container header-inner">
     <a class="wordmark" href={isBlog ? "/blog/" : "/"} aria-label={`${site.name} ${isBlog ? "Blog" : "Home"}`}>{site.name}<span aria-hidden="true">.</span>{isBlog && <span class="blog-brand">Blog</span>}</a>
     <nav aria-label={isBlog ? "Blog navigation" : "Main navigation"}>
       {links.map(({ href, label }) => (
-        <a href={href} aria-current={path === (href.replace(/\/$/, '') || '/') ? 'page' : undefined}>
+        <a href={href} aria-current={path === (href.replace(/\/$/, '') || '/') ? 'page' : href === activeHref ? 'location' : undefined}>
           {isBlog && href === '/' && <svg class="nav-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5-4 4 4 4M5 9h9a5 5 0 0 1 0 10h-3" /></svg>}
           {label}
           {!isBlog && href === '/blog/' && <svg class="nav-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12" /></svg>}
         </a>
       ))}
+      <span class="nav-indicator" aria-hidden="true" hidden></span>
     </nav>
-    <button class="theme-toggle" type="button" aria-label="Theme: Auto. Switch to Light mode" title="Theme: Auto. Switch to Light mode" hidden>
+    <button class="theme-toggle" data-liquid-glass type="button" aria-label="Theme: Auto. Switch to Light mode" title="Theme: Auto. Switch to Light mode" hidden>
       <svg class="auto-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="4" width="18" height="13" rx="2" /><path d="M8 21h8m-4-4v4" /></svg>
       <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20.5 13A8.5 8.5 0 0 1 11 3.5 8.5 8.5 0 1 0 20.5 13Z" /></svg>
       <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" /></svg>
@@ -26,6 +33,71 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
   </div>
 </header>
 <script>
+  const header = document.querySelector<HTMLElement>('.site-header');
+  if (header) {
+    const reportHeaderHeight = () => {
+      document.documentElement.style.setProperty('--header-height', `${Math.ceil(header.getBoundingClientRect().height)}px`);
+    };
+    reportHeaderHeight();
+    if ('ResizeObserver' in window) new ResizeObserver(reportHeaderHeight).observe(header);
+  }
+
+  const nav = header?.querySelector<HTMLElement>('nav');
+  const indicator = nav?.querySelector<HTMLElement>('.nav-indicator');
+  if (nav && indicator) {
+    const navLinks = Array.from(nav.querySelectorAll<HTMLAnchorElement>('a'));
+    const currentLink = navLinks.find((link) => link.hasAttribute('aria-current')) ?? null;
+    let hoveredLink: HTMLAnchorElement | null = null;
+    let focusedLink: HTMLAnchorElement | null = null;
+    let targetLink = currentLink;
+
+    const positionIndicator = () => {
+      if (!targetLink) {
+        indicator.style.opacity = '0';
+        return;
+      }
+      const navBounds = nav.getBoundingClientRect();
+      const linkBounds = targetLink.getBoundingClientRect();
+      if (!linkBounds.width || !navBounds.width) return;
+      nav.style.setProperty('--indicator-x', `${linkBounds.left - navBounds.left}px`);
+      nav.style.setProperty('--indicator-width', `${linkBounds.width}px`);
+      indicator.style.opacity = '1';
+      indicator.hidden = false;
+      nav.dataset.indicatorReady = 'true';
+    };
+    const moveIndicator = (link: HTMLAnchorElement | null) => {
+      targetLink = link;
+      positionIndicator();
+    };
+
+    positionIndicator();
+    for (const link of navLinks) {
+      link.addEventListener('pointerenter', (event) => {
+        if (event.pointerType === 'touch') return;
+        hoveredLink = link;
+        moveIndicator(link);
+      });
+      link.addEventListener('focus', () => {
+        focusedLink = link;
+        moveIndicator(link);
+      });
+    }
+    nav.addEventListener('pointerleave', () => {
+      hoveredLink = null;
+      moveIndicator(focusedLink ?? currentLink);
+    });
+    nav.addEventListener('focusout', (event) => {
+      focusedLink = navLinks.find((link) => link === event.relatedTarget) ?? null;
+      moveIndicator(focusedLink ?? hoveredLink ?? currentLink);
+    });
+    if ('ResizeObserver' in window) {
+      const observer = new ResizeObserver(positionIndicator);
+      observer.observe(nav);
+      navLinks.forEach((link) => observer.observe(link));
+    }
+    document.fonts.ready.then(positionIndicator);
+  }
+
   type ThemeMode = 'auto' | 'light' | 'dark';
   const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
   const media = window.matchMedia('(prefers-color-scheme: dark)');
@@ -57,12 +129,23 @@ const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 </script>
 
 <style>
+  nav { position: relative; }
   nav a { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+  .nav-indicator {
+    position: absolute; left: 0; bottom: -2px; width: var(--indicator-width, 0px); height: 2px;
+    border-radius: 999px; background: var(--accent); pointer-events: none; opacity: 0;
+    transform: translateX(var(--indicator-x, 0px));
+    transition: transform 240ms cubic-bezier(.22, 1, .36, 1), width 240ms cubic-bezier(.22, 1, .36, 1), opacity 160ms ease;
+  }
   .nav-icon { flex-shrink: 0; color: var(--muted); }
   .blog-brand { margin-left: 10px; color: var(--muted); font-size: 14px; font-weight: 400; letter-spacing: 0; }
   @media (max-width: 700px) {
     .header-inner { min-height: 108px; gap: 16px; flex-wrap: wrap; padding: 16px 0 12px; }
     nav { order: 3; width: 100%; justify-content: space-between; gap: 12px; }
     nav a { padding: 3px 0; }
+  }
+  @media (max-width: 380px) {
+    nav { gap: 8px; font-size: 13px; }
+    nav a { gap: 4px; }
   }
 </style>

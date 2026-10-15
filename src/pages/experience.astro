@@ -60,7 +60,7 @@ const education = [
 <style>
   .timeline { min-width: 0; }
   .timeline-entry { position: relative; border-left: 1px solid var(--border); padding-left: 28px; }
-  .timeline-entry::before { content: ''; position: absolute; left: -5px; top: 7px; width: 9px; height: 9px; border: 2px solid var(--muted); border-radius: 50%; background: var(--bg); }
+  .timeline-entry::before { content: ''; position: absolute; box-sizing: border-box; left: -0.5px; transform: translateX(-50%); top: 7px; width: 9px; height: 9px; border: 2px solid var(--muted); border-radius: 50%; background: var(--bg); }
   .timeline-entry + .timeline-entry { margin-top: 36px; }
   .entry-date { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
   .timeline-entry h3 { font-size: 19px; }

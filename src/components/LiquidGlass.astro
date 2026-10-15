@@ -1,0 +1,12 @@
+<div class="liquid-glass-scene" aria-hidden="true" inert>
+  <canvas class="site-halo"></canvas>
+</div>
+
+<script>
+  import { startLiquidGlass } from '../scripts/liquid-glass';
+  startLiquidGlass();
+</script>
+
+<style>
+  .liquid-glass-scene { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: clip; }
+</style>

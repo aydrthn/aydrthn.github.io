@@ -6,7 +6,7 @@ const { post } = Astro.props;
 const { title, description, pubDate, lang, cover, coverAlt } = post.entry.data;
 ---
 <article>
-  <a class:list={['post-card', { 'has-cover': cover }]} href={post.href}>
+  <a class:list={['post-card', { 'has-cover': cover }]} data-liquid-glass href={post.href}>
     {cover && (
       <div class="post-cover">
         <Image src={cover} alt={coverAlt} layout="constrained" widths={[240, 336, 480, 672, 1008]}
@@ -28,12 +28,12 @@ const { title, description, pubDate, lang, cover, coverAlt } = post.entry.data;
   </a>
 </article>
 <style>
-  .post-card { display: block; border: 1px solid var(--border); border-radius: 14px; overflow: hidden; background: var(--surface); transition: border-color 180ms; }
+  .post-card { display: block; transition: border-color 180ms, box-shadow 180ms; }
   .post-card.has-cover { display: grid; grid-template-columns: minmax(0, 0.35fr) minmax(0, 0.65fr); }
-  .post-cover { position: relative; min-height: 180px; background: var(--soft); }
+  .post-cover { position: relative; min-height: 180px; background: var(--soft); border-radius: calc(var(--glass-radius) - 1px) 0 0 calc(var(--glass-radius) - 1px); overflow: hidden; }
   .post-cover img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; }
   .post-details { display: flex; align-items: center; gap: 24px; min-width: 0; padding: 24px 28px; }
-  .post-card:hover { border-color: var(--muted); }
+  .post-card:hover { border-color: var(--glass-highlight); box-shadow: 0 18px 38px -14px var(--glass-shadow), inset 0 1px 0 var(--glass-highlight); }
   .post-copy { flex: 1; min-width: 0; }
   .post-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; font-size: 12px; color: var(--muted); }
   h3 { margin: 10px 0 8px; font-size: 21px; overflow-wrap: anywhere; }

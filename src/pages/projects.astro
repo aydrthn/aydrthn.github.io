@@ -48,10 +48,10 @@ const projects = [
   <PageIntro eyebrow="PROJECTS" title="From ideas to projects." />
   <section class="project-list" aria-label="Projects">
     {projects.map((project, index) => (
-      <article class="project-card" aria-labelledby={`project-${index}`}>
+      <article class="project-card" data-liquid-glass aria-labelledby={`project-${index}`}>
         <div class="project-art" aria-hidden="true">
           {project.motif === 'website' ? (
-            <div class="mini-window">
+            <div class="mini-window" data-liquid-glass>
               <div class="mini-dots"><i></i><i></i><i></i></div>
               <span>aydrthn.</span>
               <div class="mini-line"></div><div class="mini-line short"></div>
