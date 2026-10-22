@@ -1,0 +1,57 @@
+---
+export interface TimelineEntry {
+  /** ISO year, year-month, or full date; independent of the displayed date. */
+  startDate: string;
+  date: string;
+  title: string;
+  subtitle?: string;
+  details?: readonly string[];
+}
+
+interface Props {
+  entries: readonly TimelineEntry[];
+  order?: 'ascending' | 'descending';
+}
+
+const { entries, order = 'ascending' } = Astro.props;
+const direction = order === 'ascending' ? 1 : -1;
+const sortedEntries = [...entries].sort((a, b) =>
+  direction * a.startDate.localeCompare(b.startDate)
+);
+---
+
+<ol class="timeline" role="list">
+  {sortedEntries.map((entry) => (
+    <li class="timeline-entry">
+      <article>
+        <p class="entry-date">{entry.date}</p>
+        <h3>{entry.title}</h3>
+        {entry.subtitle && <p class="qualification">{entry.subtitle}</p>}
+        {entry.details?.length && (
+          <ul>{entry.details.map((detail) => <li>{detail}</li>)}</ul>
+        )}
+      </article>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .timeline { --timeline-gap: 36px; min-width: 0; margin: 0; padding: 0; list-style: none; }
+  .timeline-entry { position: relative; padding-inline-start: 28px; overflow-wrap: anywhere; }
+  .timeline-entry:not(:last-child) { padding-bottom: var(--timeline-gap); }
+  /* Each segment reaches the next marker, including the space between entries. */
+  .timeline-entry:not(:last-child)::after {
+    content: ''; position: absolute; inset-inline-start: 0; top: 11px;
+    height: 100%; border-inline-start: 1px dashed var(--muted); opacity: 0.4;
+  }
+  .timeline-entry::before {
+    content: ''; position: absolute; z-index: 1; box-sizing: border-box;
+    inset-inline-start: -4px; top: 7px; width: 9px; height: 9px;
+    border: 2px solid var(--muted); border-radius: 50%; background: var(--bg);
+  }
+  .entry-date { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+  h3 { font-size: 19px; }
+  .qualification { margin-top: 10px; font-size: 14px; }
+  .timeline-entry ul { padding-inline-start: 18px; margin: 16px 0 0; color: var(--muted); font-size: 14px; }
+  .timeline-entry ul li + li { margin-top: 10px; }
+</style>
