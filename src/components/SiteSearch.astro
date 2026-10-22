@@ -45,6 +45,14 @@ const pages = Array.from(new Map([
   input:focus-visible { outline: none; }
   .search-submit { display: grid; place-items: center; flex-shrink: 0; width: 30px; height: 30px; border: 0; border-radius: 6px; background: var(--soft); color: var(--text); cursor: pointer; }
   .search-results { --glass-radius: 22px; position: absolute; z-index: 2; top: calc(100% + 8px); width: 100%; padding: 8px; }
+  /* The shared shader samples the scene's solid background, not page content.
+     Keep a live DOM backdrop here and blend the shader as a subtle finish. */
+  .search-results[data-glass-ready='true'] {
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(18px) saturate(1.16);
+    backdrop-filter: blur(18px) saturate(1.16);
+  }
+  .search-results[data-glass-ready='true'] > :global(.liquid-glass-canvas) { opacity: 0.16; }
   .search-results-scroll { max-height: min(420px, 60vh, var(--search-room, 420px)); overflow-y: auto; overscroll-behavior: contain; border-radius: calc(var(--glass-radius) - 8px); }
   .search-list { list-style: none; margin: 0; padding: 0; }
   .search-list :global(.search-result-link) { display: block; padding: 12px; border-radius: 10px; font-size: 14px; overflow-wrap: anywhere; }
