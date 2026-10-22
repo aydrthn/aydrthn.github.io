@@ -16,6 +16,7 @@ export const navigation = [
 export const blogNavigation = [
   { href: '/blog/', label: 'Essays' },
   { href: '/blog/notes/', label: 'Notes' },
+  { href: '/blog/reviews/', label: 'Reviews' },
   { href: '/blog/archive/', label: 'Archive' },
   { href: '/', label: 'Back' },
 ];

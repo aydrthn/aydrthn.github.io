@@ -1,10 +1,11 @@
 ---
+import { Image } from 'astro:assets';
 import BaseLayout from './BaseLayout.astro';
 import { blogCategories, formatPostDate, type BlogPost } from '../lib/blog';
 import MaterialIcon from '../components/MaterialIcon.astro';
 interface Props { post: BlogPost; }
 const { post } = Astro.props;
-const { title, description, pubDate, lang } = post.entry.data;
+const { title, description, pubDate, lang, cover, coverAlt } = post.entry.data;
 const category = blogCategories[post.category];
 ---
 <BaseLayout title={`${title} — Aydrthn Blog`} description={description} section="blog" ogType="article">
@@ -18,18 +19,25 @@ const category = blogCategories[post.category];
       </div>
       <h1 lang={lang}>{title}</h1>
     </header>
+    {post.category === 'reviews' && cover && (
+      <figure class="review-cover">
+        <Image src={cover} alt={coverAlt} width={320} widths={[320, 640]} sizes="(max-width: 360px) calc(100vw - 40px), 320px" layout="none" />
+      </figure>
+    )}
     <div class="post-body" lang={lang}><slot /></div>
     <footer class="post-footer"><a class="text-link back-link" href={category.href}><MaterialIcon name="arrow_back" /> Back to {category.label}</a></footer>
   </article>
 </BaseLayout>
 <style>
-  .blog-post { max-width: 760px; margin-inline: auto; }
+  .blog-post { max-width: var(--blog-content-width); margin-inline: auto; }
   .back-link { display: inline-flex; align-items: center; gap: 5px; }
   .back-link :global(.material-icon) { margin: 0; color: currentColor; }
   .post-header { padding: var(--page-intro-top) 0 36px; border-bottom: 1px solid var(--border); }
   .post-meta { display: flex; align-items: center; gap: 10px; margin: 36px 0 16px; font-size: 12px; color: var(--muted); }
   h1 { font-size: clamp(30px, 4.5vw, 46px); line-height: 1.4; letter-spacing: -0.8px; overflow-wrap: anywhere; }
   .post-body { padding-top: 36px; font-size: 17px; line-height: 1.95; overflow-wrap: anywhere; }
+  .review-cover { width: min(320px, 100%); margin: 36px auto 0; }
+  .review-cover :global(img) { display: block; width: 100%; height: auto; border-radius: 10px; }
   .post-body :global(p), .post-body :global(ul), .post-body :global(ol) { margin: 0 0 24px; }
   .post-body :global(h2) { margin: 44px 0 20px; font-size: 26px; line-height: 1.4; }
   .post-body :global(h3), .post-body :global(h4), .post-body :global(h5), .post-body :global(h6) { margin: 32px 0 16px; line-height: 1.5; }

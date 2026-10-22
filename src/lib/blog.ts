@@ -1,6 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 
-export type BlogCategory = 'notes' | 'essays' | 'archive';
+export type BlogCategory = 'notes' | 'essays' | 'reviews' | 'archive';
 export interface BlogPost {
   entry: CollectionEntry<BlogCategory>;
   category: BlogCategory;
@@ -10,11 +10,12 @@ export interface BlogPost {
 export const blogCategories = {
   notes: { label: 'Notes', href: '/blog/notes/' },
   essays: { label: 'Essays', href: '/blog/' },
+  reviews: { label: 'Reviews', href: '/blog/reviews/' },
   archive: { label: 'Archive', href: '/blog/archive/' },
 };
 
 export async function getBlogPosts(category?: BlogCategory): Promise<BlogPost[]> {
-  const categories: BlogCategory[] = category ? [category] : ['notes', 'essays', 'archive'];
+  const categories: BlogCategory[] = category ? [category] : ['notes', 'essays', 'reviews', 'archive'];
   const groups = await Promise.all(categories.map(async (category) => {
     const entries = await getCollection(category, ({ data }) => !data.draft);
     return entries.map((entry) => ({

@@ -1768,7 +1768,7 @@ var LiquidGlass = class _LiquidGlass {
   // ────────────────────────────────────────────
   // Constructor (prefer LiquidGlass.init)
   // ────────────────────────────────────────────
-  constructor({ root, glassElements, defaults = {} }) {
+  constructor({ root, glassElements, defaults = {}, beforeRender }) {
     /** Current frames-per-second (updated every frame). */
     this.fps = 0;
     this._running = false;
@@ -1829,6 +1829,7 @@ var LiquidGlass = class _LiquidGlass {
     if (!root) throw new Error("LiquidGlass: `root` element is required.");
     this.root = root;
     this.defaults = { ...DEFAULTS, ...defaults };
+    this._beforeRender = beforeRender;
     this.glassSet = new Set(Array.from(glassElements || []));
     this.glassCanvases = /* @__PURE__ */ new Map();
     this.capture = new HtmlCapture(root);
@@ -2455,14 +2456,14 @@ var LiquidGlass = class _LiquidGlass {
       this._fpsFrames = 0;
       this._fpsTime = now;
     }
-    if (this._checkGlassSizeChanges()) {
-    }
-    if (this._glassContentDirty.size > 0 && !this._capturingGlassContent) {
-      const targets = new Set(this._glassContentDirty);
-      this._glassContentDirty.clear();
-      this._captureGlassContent(targets);
-    }
     try {
+      this._beforeRender?.();
+      this._checkGlassSizeChanges();
+      if (this._glassContentDirty.size > 0 && !this._capturingGlassContent) {
+        const targets = new Set(this._glassContentDirty);
+        this._glassContentDirty.clear();
+        this._captureGlassContent(targets);
+      }
       this._renderFrame();
     } catch (err) {
       console.error("LiquidGlass: render error:", err);
@@ -2757,8 +2758,10 @@ var LiquidGlass = class _LiquidGlass {
   }
   _getPixelRect(rect, rootRect, dpr, pad = 0) {
     return {
-      x: Math.round((rect.left - rootRect.left - pad) * dpr),
-      y: Math.round((rect.top - rootRect.top - pad) * dpr),
+      // Keep sampling continuous during subpixel movement; only backing sizes
+      // need integer pixels. All scene contributors share this origin space.
+      x: (rect.left - rootRect.left - pad) * dpr,
+      y: (rect.top - rootRect.top - pad) * dpr,
       w: Math.round((rect.width + pad * 2) * dpr),
       h: Math.round((rect.height + pad * 2) * dpr)
     };

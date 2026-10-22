@@ -26,6 +26,7 @@ type Panel = {
   canvas?: HTMLCanvasElement;
   visible: boolean;
   geometry: string;
+  metrics?: { width: number; height: number; config: string };
 };
 
 export function startLiquidGlass() {
@@ -53,6 +54,10 @@ export function startLiquidGlass() {
   const pointers = new Map<HTMLElement, { x: number; y: number }>();
   let trackUntil = 0;
   let paintNeeded = true;
+  let metricsNeeded = true;
+  let updateNeeded = true;
+  let lastScrollX = window.scrollX;
+  let lastScrollY = window.scrollY;
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const forcedColors = matchMedia('(forced-colors: active)');
 
@@ -76,51 +81,79 @@ export function startLiquidGlass() {
   function syncPanels() {
     const dark = document.documentElement.dataset.theme === 'dark';
     const viewportHeight = root!.clientHeight;
-    for (const panel of panels) {
-      const { card, proxy } = panel;
+    // Read every card before writing proxies, so one card's update cannot
+    // force layout again while measuring the next card.
+    const measurements = panels.map((panel) => {
+      const { card } = panel;
       const rect = card.getBoundingClientRect();
+      if (metricsNeeded || !panel.metrics) {
+        const width = card.offsetWidth;
+        const height = card.offsetHeight;
+        const cssRadius = getComputedStyle(card).borderTopLeftRadius;
+        const radius = cssRadius.endsWith('%')
+          ? parseFloat(cssRadius) * Math.min(width, height) / 100
+          : parseFloat(cssRadius) || 24;
+        panel.metrics = { width, height, config: JSON.stringify({
+          cornerRadius: radius,
+          zRadius: Math.min(18, radius),
+          brightness: dark ? 0.015 : 0,
+          shadowOpacity: 0,
+          // The CSS pointer halo replaces the upstream button brightness boost.
+          button: false,
+        }) };
+      }
       const visible = rect.width > 0 && rect.height > 0 && rect.bottom > -40 && rect.top < viewportHeight + 40;
+      return { panel, rect, visible, metrics: panel.metrics };
+    });
+    metricsNeeded = false;
+    for (const { panel, rect, visible, metrics } of measurements) {
+      const { card, proxy } = panel;
+      // An interrupted init also calls destroy(), which clears positioning.
+      if (proxy.style.position !== 'absolute') proxy.style.position = 'absolute';
       panel.visible = visible;
       // Park offscreen/hidden surfaces at a tiny size to avoid shading large
       // invisible panels. The library retains its reusable GPU framebuffer pool.
       const x = visible ? rect.left : -1000;
       const y = visible ? rect.top : -1000;
-      const width = visible ? card.offsetWidth : 1;
-      const panelHeight = visible ? card.offsetHeight : 1;
-      proxy.style.position = 'absolute';
+      const width = visible ? metrics.width : 1;
+      const panelHeight = visible ? metrics.height : 1;
       const geometry = `${x},${y},${width},${panelHeight}`;
       if (geometry !== panel.geometry) {
         Object.assign(proxy.style, { left: `${x}px`, top: `${y}px`, width: `${width}px`, height: `${panelHeight}px` });
         panel.geometry = geometry;
         instance?.markChanged(proxy);
       }
-      const cssRadius = getComputedStyle(card).borderTopLeftRadius;
-      const radius = cssRadius.endsWith('%')
-        ? parseFloat(cssRadius) * Math.min(card.offsetWidth, card.offsetHeight) / 100
-        : parseFloat(cssRadius) || 24;
-      const config = JSON.stringify({
-        cornerRadius: radius,
-        zRadius: Math.min(18, radius),
-        brightness: dark ? 0.015 : 0,
-        shadowOpacity: 0,
-        // The pointer halo replaces the upstream button mode's uniform
-        // brightness boost. Refraction and edge lighting remain in WebGL.
-        button: false,
-      });
-      if (proxy.dataset.config !== config) proxy.dataset.config = config;
+      if (proxy.dataset.config !== metrics.config) {
+        proxy.dataset.config = metrics.config;
+        // MutationObserver runs later; invalidate now for this frame's render.
+        instance?.markChanged(proxy);
+      }
       if (!visible) delete card.dataset.glassReady;
     }
   }
 
   function schedule(repaint = false) {
     paintNeeded ||= repaint;
-    if (stopped || frame) return;
+    metricsNeeded ||= repaint;
+    updateNeeded = true;
+    // Once initialized, the renderer owns geometry updates and drawing in one
+    // RAF. A separate frame is only needed before init or for the CSS fallback.
+    if (stopped || instance || frame) return;
     frame = requestAnimationFrame(update);
+  }
+
+  function beforeRender() {
+    const scrollChanged = window.scrollX !== lastScrollX || window.scrollY !== lastScrollY;
+    if (!updateNeeded && !scrollChanged && performance.now() >= trackUntil) return;
+    update();
   }
 
   function update() {
     frame = 0;
     if (stopped) return;
+    updateNeeded = false;
+    lastScrollX = window.scrollX;
+    lastScrollY = window.scrollY;
     if (paintNeeded) {
       paintHalo();
       paintNeeded = false;
@@ -144,7 +177,7 @@ export function startLiquidGlass() {
       }
       if (waiting) schedule();
     });
-    if (performance.now() < trackUntil) schedule();
+    if (!instance && performance.now() < trackUntil) schedule();
   }
 
   function trackTransition() {
@@ -200,12 +233,16 @@ export function startLiquidGlass() {
       paintHalo();
       paintNeeded = false;
       syncPanels();
-      const next = await LiquidGlass.init({ root: root!, glassElements: panels.map(({ proxy }) => proxy), defaults: OPTICS });
+      const next = await LiquidGlass.init({
+        root: root!, glassElements: panels.map(({ proxy }) => proxy), defaults: OPTICS, beforeRender,
+      });
       if (stopped || document.hidden || forcedColors.matches) {
         next.destroy();
         return;
       }
       instance = next;
+      cancelAnimationFrame(frame);
+      frame = 0;
       for (const panel of panels) {
         const canvas = next.glassCanvases.get(panel.proxy);
         if (!canvas) continue;
@@ -248,7 +285,7 @@ export function startLiquidGlass() {
   panels.forEach(({ card }) => resize.observe(card));
   const theme = new MutationObserver(() => schedule(true));
   theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
-  const visibility = new MutationObserver(() => schedule());
+  const visibility = new MutationObserver(() => schedule(true));
   panels.forEach(({ card }) => visibility.observe(card, { attributes: true, attributeFilter: ['hidden'] }));
   window.addEventListener('scroll', () => schedule(), { passive: true, signal });
   window.addEventListener('resize', () => schedule(true), { passive: true, signal });

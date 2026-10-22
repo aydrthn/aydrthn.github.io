@@ -21,6 +21,10 @@ export const collections = {
     loader: glob({ base: './src/docs/essays', pattern: '**/*.md' }),
     schema: postSchema,
   }),
+  reviews: defineCollection({
+    loader: glob({ base: './src/docs/reviews', pattern: '**/*.md' }),
+    schema: postSchema,
+  }),
   archive: defineCollection({
     loader: glob({ base: './src/docs/archive', pattern: '**/*.md' }),
     schema: postSchema,

@@ -23,6 +23,8 @@ export interface LiquidGlassOptions {
     glassElements?: NodeListOf<HTMLElement> | HTMLElement[];
     /** Override the default configuration values. */
     defaults?: Partial<GlassConfig>;
+    /** Synchronize layout synchronously before each frame's size checks and rendering. */
+    beforeRender?: () => void;
 }
 interface ObjectFitRect {
     sx: number;
@@ -42,6 +44,7 @@ export declare class LiquidGlass {
     fps: number;
     private _running;
     private _rafId;
+    private readonly _beforeRender;
     private _hasDynamic;
     /**
      * Genuinely-global dirty flag — set by events that legitimately
@@ -94,7 +97,7 @@ export declare class LiquidGlass {
     private readonly _onPointerDown;
     private readonly _onPointerMove;
     private readonly _onPointerUp;
-    constructor({ root, glassElements, defaults }: LiquidGlassOptions);
+    constructor({ root, glassElements, defaults, beforeRender }: LiquidGlassOptions);
     private _start;
     destroy(): void;
     private _setupGlassElements;

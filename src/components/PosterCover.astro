@@ -1,0 +1,68 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends Pick<HTMLAttributes<'div'>, 'class' | 'style'> {
+  src: ImageMetadata;
+  alt: string;
+  /** Fill a positioned parent; otherwise use the default 4:5 frame. */
+  fill?: boolean;
+  widths?: number[];
+  sizes?: string;
+}
+const {
+  src, alt, fill = false,
+  widths = [240, 336, 480, 672, 1008],
+  sizes = '320px',
+  class: className, style,
+} = Astro.props;
+---
+<div class:list={['poster-cover', className, { fill }]} style={style}>
+  <Image class="backdrop" src={src} alt="" aria-hidden="true" width={240} quality={60} layout="none" />
+  <div class="foreground">
+    <Image class="artwork" src={src} alt={alt} widths={widths} sizes={sizes} layout="none" />
+  </div>
+</div>
+<style>
+  /* Override --poster-* tokens on a parent or with the component's style prop. */
+  .poster-cover {
+    position: relative;
+    isolation: isolate;
+    width: 100%;
+    aspect-ratio: var(--poster-aspect, 4 / 5);
+    overflow: hidden;
+    border-radius: var(--poster-frame-radius, 0px);
+    background: var(--soft);
+  }
+  .poster-cover.fill { position: absolute; inset: 0; height: 100%; aspect-ratio: auto; }
+  .backdrop {
+    position: absolute;
+    z-index: 0;
+    inset: calc(-2 * var(--poster-blur, 18px));
+    width: calc(100% + 4 * var(--poster-blur, 18px));
+    height: calc(100% + 4 * var(--poster-blur, 18px));
+    max-width: none;
+    object-fit: cover;
+    filter: blur(var(--poster-blur, 18px)) brightness(var(--poster-brightness, .8));
+    pointer-events: none;
+    user-select: none;
+  }
+  .foreground {
+    position: absolute;
+    z-index: 1;
+    inset: var(--poster-inset, 12px);
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: center;
+  }
+  .artwork {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: var(--poster-radius, 6px);
+    box-shadow: var(--poster-shadow, 0 3px 12px rgb(0 0 0 / 20%));
+  }
+</style>

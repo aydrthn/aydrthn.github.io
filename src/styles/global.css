@@ -3,6 +3,9 @@
   color-scheme: light;
   --page-intro-top: 88px;
   --header-height: 89px;
+  --blog-content-width: 760px;
+  --blog-cover-share: 35%;
+  --blog-cover-max: 250px;
   --bg: #eef0f3; --surface: #fff; --text: #22304a; --muted: #435269; --border: rgb(86 123 173 / 20%);
   --accent: #285cc0; --soft: rgb(98 148 210 / 10%); --header: rgb(255 255 255 / 56%);
   --glass-fill: rgb(255 255 255 / 35%); --glass-edge: rgb(255 255 255 / 76%);
