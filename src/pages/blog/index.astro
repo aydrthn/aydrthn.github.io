@@ -1,9 +1,21 @@
 ---
-import BlogLayout from '../../layouts/BlogLayout.astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlogPostList from '../../components/BlogPostList.astro';
+import SiteSearch from '../../components/SiteSearch.astro';
 import { getBlogPosts } from '../../lib/blog';
-const posts = await getBlogPosts('essays');
+const posts = await getBlogPosts();
 ---
-<BlogLayout title="Blog" eyebrow="BLOG / ESSAYS">
-  <BlogPostList posts={posts} heading="Latest essays" emptyMessage="No essays yet." />
-</BlogLayout>
+<BaseLayout title="Blog — Aydrthn" description="Essays, notes, and reviews on technology, stories, and everyday life." section="blog">
+  <section class="page-intro blog-intro" aria-labelledby="blog-title">
+    <p class="eyebrow">A PERSONAL JOURNAL</p>
+    <h1 id="blog-title">Blog.</h1>
+    <p class="blog-description">Thoughts on technology, stories, and everyday life.</p>
+    <SiteSearch scope="blog" />
+  </section>
+  <BlogPostList posts={posts} heading="Latest posts" />
+</BaseLayout>
+<style>
+  .blog-intro { max-width: var(--blog-content-width); margin-inline: auto; }
+  .blog-description { margin-bottom: 28px; color: var(--muted); font-size: 17px; }
+  .blog-intro :global(.site-search) { width: 100%; }
+</style>

@@ -2,19 +2,24 @@
 import { navigation, blogNavigation } from '../data/site';
 import { blogCategories, getBlogPosts } from '../lib/blog';
 import MaterialIcon from './MaterialIcon.astro';
+interface Props { scope?: 'site' | 'blog'; }
+const { scope = 'site' } = Astro.props;
+const searchLabel = scope === 'blog' ? 'Search articles and tags' : 'Search pages, articles, and tags';
 const posts = await getBlogPosts();
 const pages = Array.from(new Map([
-  ...navigation.map(({ href, label }) => ({ href, title: label, section: href.startsWith('/blog/') ? 'Blog' : 'Page' })),
-  ...blogNavigation.filter(({ href }) => href !== '/').map(({ href, label }) => ({ href, title: label, section: 'Blog' })),
+  ...(scope === 'site' ? [
+    ...navigation.map(({ href, label }) => ({ href, title: label, section: href.startsWith('/blog/') ? 'Blog' : 'Page' })),
+    ...blogNavigation.filter(({ href }) => href !== '/').map(({ href, label }) => ({ href, title: href === '/blog/' ? 'Blog' : label, section: 'Blog' })),
+  ] : []),
   ...posts.map(({ href, entry, category }) => ({
-    href, title: entry.data.title, section: `${blogCategories[category].label} article`, description: entry.data.description,
+    href, title: entry.data.title, section: `${blogCategories[category].label} article`, description: entry.data.description, tags: entry.data.tags,
   })),
 ].map((page) => [page.href, page])).values());
 ---
 <div class="site-search" data-search-pages={JSON.stringify(pages)}>
   <form class="search-bar" data-liquid-glass role="search">
     <MaterialIcon name="search" class="search-icon" />
-    <input type="search" name="q" aria-label="Search pages and articles" placeholder="Search pages and articles…" autocomplete="off" aria-controls="search-results" />
+    <input type="search" name="q" aria-label={searchLabel} placeholder={`${searchLabel}…`} autocomplete="off" aria-controls="search-results" />
     <button class="search-submit" type="submit" aria-label="Search"><MaterialIcon name="arrow_forward" /></button>
   </form>
   <div class="search-results" data-liquid-glass id="search-results" aria-busy="false" hidden>
@@ -49,6 +54,8 @@ const pages = Array.from(new Map([
   .search-list :global(.search-result-title) { font-weight: 600; line-height: 1.5; }
   .search-list :global(.search-result-section) { display: block; margin-top: 2px; color: var(--muted); font-size: 11px; }
   .search-list :global(.search-result-snippet) { display: block; margin-top: 6px; color: var(--muted); font-size: 12px; line-height: 1.6; }
+  .search-list :global(.search-result-tags) { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; padding: 0; list-style: none; }
+  .search-list :global(.search-result-tags .pill) { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
   .search-status { margin: 0; padding: 8px 12px; font-size: 12px; color: var(--muted); }
   .search-retry { margin: 2px 12px 10px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--soft); color: var(--text); font: inherit; font-size: 12px; cursor: pointer; }
   @media (max-width: 560px) { input { font-size: 16px; } }

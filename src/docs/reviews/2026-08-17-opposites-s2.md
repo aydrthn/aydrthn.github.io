@@ -3,6 +3,7 @@ title: "在我心中可以算是最伟大的恋爱喜剧作品了。"
 description: "遇见、交往、相处，整个过程仿佛浑然天成。关于《相反的你和我 第二季》的观后感。"
 pubDate: 2026-08-17
 lang: zh-CN
+tags: ["Anime", "Romance", "Slice of Life"]
 cover: ./img/opposites-s2.jpg
 coverAlt: "相反的你和我 第二季 cover"
 # Original article: https://bgm.tv/blog/378670

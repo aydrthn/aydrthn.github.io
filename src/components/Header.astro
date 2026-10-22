@@ -13,7 +13,7 @@ const activeHref = links
   })
   .sort((a, b) => b.href.length - a.href.length)[0]?.href;
 ---
-<header class="site-header">
+<header class:list={['site-header', { 'blog-header': isBlog }]}>
   <div class="container header-inner">
     <a class="wordmark" href={isBlog ? "/blog/" : "/"} aria-label={`${site.name} ${isBlog ? "Blog" : "Home"}`}>{site.name}<span aria-hidden="true">.</span>{isBlog && <span class="blog-brand">Blog</span>}</a>
     <nav aria-label={isBlog ? "Blog navigation" : "Main navigation"}>
@@ -33,6 +33,15 @@ const activeHref = links
     </button>
   </div>
 </header>
+<style>
+  @media (max-width: 900px) {
+    .blog-header .header-inner { flex-wrap: wrap; gap: 16px; padding-block: 16px 12px; }
+    .blog-header nav { order: 3; width: 100%; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; }
+  }
+  @media (max-width: 560px) {
+    .blog-header nav { flex-wrap: nowrap; gap: 8px; font-size: 12px; }
+  }
+</style>
 <script>
   const header = document.querySelector<HTMLElement>('.site-header');
   if (header) {

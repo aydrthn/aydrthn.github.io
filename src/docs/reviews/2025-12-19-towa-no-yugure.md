@@ -3,6 +3,7 @@ title: "让人无力的诡异"
 description: "从人物动机、叙事节奏到世界观，记录《永远的黄昏》带来的困惑与无力感。"
 pubDate: 2025-12-19
 lang: zh-CN
+tags: ["Anime", "Science Fiction", "Storytelling"]
 cover: ./img/towa-no-yugure.jpg
 coverAlt: "永远的黄昏 cover"
 # Original article: https://bgm.tv/blog/365199

@@ -3,6 +3,7 @@ title: 从 Mac 到 Mac
 description: 从 2012 款 MacBook Air 到 2023 款 MacBook Pro，记录三个阶段的使用经历。
 pubDate: 2023-08-28
 lang: zh-CN
+tags: ["Mac", "Technology", "Personal"]
 cover: ./img/fm2m.png
 coverAlt: 从 Mac 到 Mac
 comments: true

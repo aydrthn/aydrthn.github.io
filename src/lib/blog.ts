@@ -9,7 +9,7 @@ export interface BlogPost {
 
 export const blogCategories = {
   notes: { label: 'Notes', href: '/blog/notes/' },
-  essays: { label: 'Essays', href: '/blog/' },
+  essays: { label: 'Essays', href: '/blog/essays/' },
   reviews: { label: 'Reviews', href: '/blog/reviews/' },
   archive: { label: 'Archive', href: '/blog/archive/' },
 };

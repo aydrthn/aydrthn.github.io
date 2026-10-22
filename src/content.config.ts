@@ -7,6 +7,7 @@ const postSchema = ({ image }: SchemaContext) => z.object({
   description: z.string().trim().min(1),
   pubDate: z.coerce.date(),
   lang: z.string().default('en'),
+  tags: z.array(z.string().trim().min(1)).default([]),
   draft: z.boolean().default(false),
   cover: image().optional(),
   coverAlt: z.string().default(''),

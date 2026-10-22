@@ -1,0 +1,13 @@
+---
+interface Props { tags?: string[]; }
+const { tags = [] } = Astro.props;
+---
+{tags.length > 0 && (
+  <ul class="post-tags" aria-label="Tags" role="list">
+    {tags.map((tag) => <li class="pill">{tag}</li>)}
+  </ul>
+)}
+<style>
+  .post-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 0; padding: 0; list-style: none; }
+  .pill { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+</style>

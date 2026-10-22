@@ -5,6 +5,7 @@ pubDate: 2026-01-16
 cover: ./img/penacony.jpg
 coverAlt: Honkai Star Rail — Penacony soundtrack cover
 lang: zh-CN
+tags: ["Games", "Honkai: Star Rail", "Storytelling"]
 ---
 
 过完崩坏：星穹铁道的匹诺康尼篇后，我也算是体验过国产“二次元”游戏是怎样一种存在了。

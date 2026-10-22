@@ -3,6 +3,7 @@ title: 关于网上舆论的一些思考
 description: 从一场数码产品争论出发，思考语境、断章取义和网上舆论。
 pubDate: 2023-10-02
 lang: zh-CN
+tags: ["Technology", "Media Literacy", "Online Discourse"]
 cover: ./img/src.png
 coverAlt: 两段评测言论的对比图
 comments: true

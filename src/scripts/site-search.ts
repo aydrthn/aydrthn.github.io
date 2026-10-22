@@ -1,4 +1,4 @@
-type SearchPage = { href: string; title: string; section: string; description?: string };
+type SearchPage = { href: string; title: string; section: string; description?: string; tags?: string[] };
 
 const normalize = (text: string) => text.normalize('NFKC').toLocaleLowerCase();
 
@@ -40,6 +40,7 @@ export function startSiteSearch(search: HTMLElement) {
     if (!Array.isArray(manifest)) return;
     pages = manifest.filter((page): page is SearchPage => Boolean(page && typeof page === 'object'
       && typeof page.href === 'string' && typeof page.title === 'string' && typeof page.section === 'string'
+      && (page.tags === undefined || (Array.isArray(page.tags) && page.tags.every((tag: unknown) => typeof tag === 'string')))
       && page.href.startsWith('/') && !page.href.startsWith('//')));
   } catch { return; }
 
@@ -82,12 +83,13 @@ export function startSiteSearch(search: HTMLElement) {
     const matches = pages.map((page) => {
       const body = bodies.get(page.href) ?? '';
       const title = normalize(page.title);
-      const text = normalize(`${page.title} ${page.section} ${page.description ?? ''} ${body}`);
+      const tags = (page.tags ?? []).map(normalize);
+      const text = normalize(`${page.title} ${page.section} ${page.description ?? ''} ${tags.join(' ')} ${body}`);
       return {
         page,
         body,
         match: tokens.every((token) => text.includes(token)),
-        score: title === query ? 3 : title.includes(query) ? 2 : tokens.some((token) => title.includes(token)) ? 1 : 0,
+        score: title === query ? 4 : title.includes(query) ? 3 : tags.includes(query) ? 2 : tokens.some((token) => title.includes(token) || tags.some((tag) => tag.includes(token))) ? 1 : 0,
       };
     }).filter(({ match }) => match).sort((a, b) => b.score - a.score);
 
@@ -122,6 +124,19 @@ export function startSiteSearch(search: HTMLElement) {
         const summary = document.createElement('span');
         summary.className = 'search-result-snippet';
         link.append(heading, section, summary);
+        if (page.tags?.length) {
+          const tags = document.createElement('ul');
+          tags.className = 'search-result-tags';
+          tags.setAttribute('aria-label', 'Tags');
+          tags.setAttribute('role', 'list');
+          for (const tag of page.tags) {
+            const label = document.createElement('li');
+            label.className = 'pill';
+            label.textContent = tag;
+            tags.append(label);
+          }
+          link.append(tags);
+        }
         item.append(link);
         rows.set(page.href, item);
       }

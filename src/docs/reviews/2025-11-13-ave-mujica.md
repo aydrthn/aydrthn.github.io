@@ -3,6 +3,7 @@ title: "一切结束之后，再翻出当时写了但没敢发的评论"
 description: "重读完结时写下的评论，谈《BanG Dream! Ave Mujica》的角色、剧情衔接与观众期待。"
 pubDate: 2025-11-13
 lang: zh-CN
+tags: ["Anime", "Music", "Storytelling"]
 cover: ./img/ave-mujica.jpg
 coverAlt: "BanG Dream! Ave Mujica cover"
 # Original article: https://bgm.tv/blog/363712

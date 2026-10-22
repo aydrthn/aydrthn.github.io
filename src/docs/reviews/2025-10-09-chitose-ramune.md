@@ -3,6 +3,7 @@ title: "暴力现充“美学”"
 description: "从第一话出发，谈《弹珠汽水瓶里的千岁同学》的人物塑造与观感。"
 pubDate: 2025-10-09
 lang: zh-CN
+tags: ["Anime", "Romance", "Characters"]
 cover: ./img/chitose-ramune.jpg
 coverAlt: "弹珠汽水瓶里的千岁同学 cover"
 # Original article: https://bgm.tv/blog/362128
